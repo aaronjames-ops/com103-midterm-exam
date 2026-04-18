@@ -3,7 +3,6 @@ while True:
     section = input("\nClass section: ").upper()
     coordinator = input("Coordinator name: ").title()
 
-    # 2D LIST (SPORT + TYPE TOGETHER)
     sports = [
         ["Basketball", "  [Team]"],
         ["Volleyball", "  [Team]"],
