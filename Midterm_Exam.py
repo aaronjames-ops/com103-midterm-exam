@@ -1,86 +1,109 @@
- #INITIAL INPUTS
-section = input("Class section: ")
-coordinator = input("Coordinator name: ")
+while True:
+    print("\n===INTRAMURALS SPORTS EVENT TRACKER===")
+    section = input("\nClass section: ").upper()
+    coordinator = input("Coordinator name: ").title()
 
-# DATA STORAGE
-sports_names = ["Basketball", "Volleyball", "Badminton", "Chess", "Table Tennis"]
-sports_types = ["[Team]", "[Team]", "[Individual]", "[Individual]", "[Individual]"]
+    # 2D LIST (SPORT + TYPE TOGETHER)
+    sports = [
+        ["Basketball", "  [Team]"],
+        ["Volleyball", "  [Team]"],
+        ["Badminton", "  [Individual]"],
+        ["Chess", "  [Individual]"],
+        ["Table Tennis", "[Individual]"]
+    ]
 
-# TRACKING VARIABLES
-selected_names = []
-opponents = []
-results = []
-points_list = []
-total_points = 0
-game_count = 1
+    selected_games = []
+    total_points = 0
+    game_count = 1
 
-print("==========================================")
-print("INTRAMURALS -- SPORTS EVENTS")
-print("1 Basketball    [Team]")
-print("2 Volleyball    [Team]")
-print("3 Badminton     [Individual]")
-print("4 Chess         [Individual]")
-print("5 Table Tennis  [Individual]")
+    print("\n==========================================")
+    print(f"      {"INTRAMURALS -- SPORTS EVENTS"}")
+    print("==========================================")
 
-# INPUT LOOP (MAX 5 GAMES FOR BREVITY)
-while game_count <= 5:
-    print(f"--- GAME {game_count} ---")
-    choice_raw = input("Sport number (0 to skip): ")
-    
-    # VALIDATION: CHECK FOR SIGNS, EXTRA SPACES, OR NON-DIGITS
-    is_valid = True
-    if not choice_raw.isdigit():
-        is_valid = False
-    
-    if is_valid == False:
-        print("Invalid input! Use numbers only without signs or spaces.")
-    else:
-        choice = int(choice_raw)
+    i = 0
+    while i < len(sports):
+        print(f"{i+1:>3}. {sports[i][0]:<10} {sports[i][1]}")
+        i += 1
+
+    while game_count <= 4:
+        print(f"\n--- GAME {game_count} ---")
+        choice_raw = input("Sport number (0 to skip): ")
         
-        if choice == 0:
-            game_count = 6 # BREAK LOOP
-        elif choice >= 1 and choice <= 5:
-            opp_name = input("Opposing section: ")
-            res = input("Result (W/L): ").upper()
-            
-            # CALCULATE POINTS
-            if res == "W":
-                pts = 3
-                res_text = "WIN"
-            else:
-                pts = 0
-                res_text = "LOSS"
-            
-            # SAVE DATA
-            selected_names.append(sports_names[choice-1])
-            opponents.append(opp_name)
-            results.append(res_text)
-            points_list.append(pts)
-            total_points = total_points + pts
-            
-            game_count = game_count + 1
+        if not choice_raw.isdigit():
+            print("Invalid input!")
         else:
-            print("Please choose 1-5 or 0 to skip.")
+            choice = int(choice_raw)
+            
+            if choice == 0:
+                print("Game skipped.")
+                selected_games.append([
+                    "No Game",
+                    "",
+                    "-",
+                    "SKIPPED",
+                    0
+                ])
+                game_count += 1
+                continue
 
-# CALCULATE STANDING
-if total_points >= 9:
-    standing = "GOLD CONTENDER"
-elif total_points >= 6:
-    standing = "SILVER PUSH"
-else:
-    standing = "KEEP FIGHTING!"
+            elif 1 <= choice <= 5:
+                opp_name = input("Opposing section: ")
+                res = input("Result (W/L): ").upper()
 
-# FINAL DISPLAY
-print("=============================================")
-print(section, "-- GAME RESULTS BOARD")
-print("Coordinator :", coordinator)
+                if res == "W":
+                    pts = 3
+                    res_text = "WIN"
+                elif res == "L":
+                    pts = 0
+                    res_text = "LOSS"
+                else:
+                    print("Invalid result! Please enter W or L.")
+                    continue
+                
+                selected_games.append([
+                    sports[choice-1][0],
+                    sports[choice-1][1],
+                    opp_name,
+                    res_text,
+                    pts
+                ])
+                
+                total_points += pts
+                game_count += 1
+            else:
+                print("Please choose 1-5 or 0 to skip.")
 
-# PRINT LISTED RESULTS
-index = 0
-while index < len(selected_names):
-    print(f"[{index + 1}] {selected_names[index]}")
-    print(f"vs {opponents[index]}  |  Result: {results[index]}  |  Points: {points_list[index]}")
-    index = index + 1
+    if total_points >= 9:
+        standing = "GOLD CONTENDER"
+    elif total_points >= 6:
+        standing = "SILVER PUSH"
+    else:
+        standing = "KEEP FIGHTING!"
 
-print(f"Total Points   : {total_points}")
-print(f"Standing       : {standing}")
+    print("\n=============================================")
+    print(section, "-- GAME RESULTS BOARD")
+    print("=============================================")
+    print("Coordinator :", coordinator)
+    print("=============================================\n")
+
+
+    i = 0
+    while i < len(selected_games):
+        game = selected_games[i]
+        print(f"[{i+1}] {game[0]} {game[1]}")
+        print(f"vs {game[2]}  |  Result: {game[3]}  |  Points: {game[4]}")
+        i += 1
+
+    print(f"\nTotal Points   : {total_points}")
+    print(f"Standing       : {standing}")
+    
+    question = input("Would you like to try the tracker again? [Yes/No]: ").title()
+    if question == "Yes":
+        print("Continuing...")
+        continue
+    elif question == "No":
+        print("Exiting...")
+        break
+    else:
+        print("Invalid result! Please enter W or L.")
+        break
